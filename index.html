@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            font-size: 30px;
+            margin: 20px;
+        }
+        td:not(#input) {
+            cursor: pointer;
+        }
+        table {
+            border: 1px solid black;
+            width: 300px;
+            height: 400px;
+            text-align: center;
+            margin: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td colspan="4" id="input">0</td>
+        </tr>
+        <tr>
+            <td id="C">C</td>
+            <td id="/" class="operator">/</td>
+            <td id="*" class="operator">*</td>
+            <td id="-" class="operator">-</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+            <td rowspan="2" id="+" class="operator">+</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td id="=" class="operator" rowspan="2">=</td>
+        </tr>
+        <tr>
+            <td colspan="2">0</td>
+            <td id="." class="operator">.</td>
+        </tr>
+    </table>
+
+    <script>
+        let input = document.getElementById("input");
+        let td = document.getElementsByTagName("td");
+        let operator = ["+", "-", "*", "/", "Enter", ".", "="];
+
+        for(let i=0;i<td.length;i++){
+            if(td[i].id != "input") {
+                td[i].onclick = () => {
+                    addNumber(td[i].innerText);
+                }
+            }
+        }
+
+        document.onkeydown = (event) => {
+            let key = event.key;
+            if(!isNaN(key) || operator.includes(key)) {
+                addNumber(key);
+            }
+        }
+
+        let addNumber = (number) => {
+            let disable = () => {
+                            this.setAttribute("editable", true);
+                        }
+            parseFloat(input.innerText)
+            if(number == "C"){
+                input.innerText = 0;
+                document.querySelectorAll('td.operator').forEach(opt => {
+                    opt.style.pointerEvents= "auto";
+                })
+            }
+            else if(number == "=" || number == "Enter"){
+                input.innerText = eval(input.innerText);
+                document.querySelectorAll('td.operator').forEach(opt => {
+                    opt.style.pointerEvents= "auto";
+                })
+            }
+            else {
+                if(input.innerText == 0) {
+                    input.innerText = number;
+                }
+                else {
+                    input.innerText += number;
+                    console.log(input.innerText)
+                    if(operator.includes(input.innerText.slice(-1))){
+                        document.querySelectorAll('td.operator').forEach(opt => {
+                            opt.style.pointerEvents= "none";
+                        })
+                    }
+
+                    if(!operator.includes(input.innerText.slice(-1))){
+                        document.querySelectorAll('td.operator').forEach(opt => {
+                            opt.style.pointerEvents= "auto";
+                        })
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
